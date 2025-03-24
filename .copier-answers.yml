@@ -1,0 +1,14 @@
+# Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
+_commit: v4.3.8
+_src_path: https://github.com/jupyterlab/extension-template
+author_email: bloomquist.sam@gmail.com
+author_name: Sam Bloomquist
+has_binder: true
+has_settings: true
+kind: frontend
+labextension_name: lab-launcher-customization
+project_short_description: 'Add abitrary launcher icons '
+python_name: lab_launcher_customization
+repository: https://github.com/bloomsa/lab-launcher-customization
+test: true
+

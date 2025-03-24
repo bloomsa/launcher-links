@@ -1,0 +1,8 @@
+{
+  "jupyter.lab.shortcuts": [],
+  "title": "lab-launcher-customization",
+  "description": "lab-launcher-customization settings.",
+  "type": "object",
+  "properties": {},
+  "additionalProperties": false
+}
