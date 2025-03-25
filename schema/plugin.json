@@ -3,6 +3,13 @@
   "title": "lab-launcher-customization",
   "description": "lab-launcher-customization settings.",
   "type": "object",
-  "properties": {},
+  "properties": {
+    "webpageUrl": {
+      "type": "string",
+      "title": "Webpage URL",
+      "description": "The URL to open when clicking the launcher icon",
+      "default": "https://www.example.com"
+    }
+  },
   "additionalProperties": false
 }
