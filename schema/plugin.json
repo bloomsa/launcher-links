@@ -1,14 +1,64 @@
 {
-  "jupyter.lab.shortcuts": [],
-  "title": "lab-launcher-customization",
-  "description": "lab-launcher-customization settings.",
+  "title": "Lab Launcher Customization",
+  "description": "Settings for the Lab Launcher Customization extension.",
   "type": "object",
   "properties": {
-    "webpageUrl": {
-      "type": "string",
-      "title": "Webpage URL",
-      "description": "The URL to open when clicking the launcher icon",
-      "default": "https://www.example.com"
+    "launchers": {
+      "type": "array",
+      "title": "Custom Launchers",
+      "description": "Define custom launcher items to add to the JupyterLab launcher",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier suffix for the command (e.g., 'open-google'). Combined with the extension ID."
+          },
+          "label": {
+            "type": "string",
+            "description": "Text label for the launcher item and command."
+          },
+          "url": {
+            "type": "string",
+            "description": "URL to open when the item is clicked.",
+            "format": "url"
+          },
+          "icon": {
+            "type": "string",
+            "description": "Name of a LabIcon (e.g., 'ui-components:jupyter') or an SVG string.",
+            "default": "ui-components:launch"
+          },
+          "category": {
+            "type": "string",
+            "description": "Category in the JupyterLab launcher.",
+            "default": "Other"
+          },
+          "rank": {
+              "type": "number",
+              "description": "Rank order within the category.",
+              "default": 1
+          }
+        },
+        "required": ["id", "label", "url"]
+      },
+      "default": [
+        {
+          "id": "open-jupyter",
+          "label": "Open Jupyter",
+          "url": "https://jupyter.org",
+          "icon": "ui-components:jupyter",
+          "category": "Help",
+          "rank": 10
+        },
+        {
+          "id": "open-example",
+          "label": "Open Example.com",
+          "url": "https://www.example.com",
+          "icon": "ui-components:launch",
+          "category": "Other",
+          "rank": 1
+        }
+      ]
     }
   },
   "additionalProperties": false
