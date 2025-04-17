@@ -8,7 +8,6 @@ import { ILauncher } from '@jupyterlab/launcher';
 import { LabIcon } from '@jupyterlab/ui-components';
 import { IDisposable } from '@lumino/disposable';
 
-// Interface for the launcher item configuration
 interface ILauncherItem {
   id: string;
   label: string;
@@ -18,9 +17,26 @@ interface ILauncherItem {
   rank?: number;
 }
 
-/**
- * Initialization data for the lab-launcher-customization extension.
- */
+// Add this function to process the SVG string
+function namespaceSvgClasses(svgStr: string, namespace: string): string {
+  // Create a unique prefix based on the namespace
+  const prefix = `${namespace}-cls-`;
+  
+  // Replace all class definitions in style elements
+  svgStr = svgStr.replace(
+    /\.cls-(\d+)\s*{([^}]+)}/g,
+    `.${prefix}$1{$2}`
+  );
+  
+  // Replace all class attributes on elements
+  svgStr = svgStr.replace(
+    /class="cls-(\d+)"/g,
+    `class="${prefix}$1"`
+  );
+  
+  return svgStr;
+}
+
 const plugin: JupyterFrontEndPlugin<void> = {
   id: 'lab-launcher-customization:plugin',
   description: 'Add arbitrary launcher icons based on settings.',
@@ -49,7 +65,6 @@ const plugin: JupyterFrontEndPlugin<void> = {
       // Safely get the launchers setting and cast through unknown
       const configuredLaunchers = (settings.get('launchers').composite as unknown as ILauncherItem[]) || [];
       console.log('Updating launchers with:', configuredLaunchers);
-
       configuredLaunchers.forEach(item => {
         const commandId = `${plugin.id}:${item.id}`;
         const iconStr = item.icon || 'ui-components:launch'; // Default icon
@@ -57,44 +72,51 @@ const plugin: JupyterFrontEndPlugin<void> = {
         // Try to resolve LabIcon by name, otherwise assume it's an SVG string
         let commandIcon: LabIcon;
         try {
-          // Check if iconStr is in the format "module:iconName"
-          if (iconStr.includes(':')) {
-            // Resolve icon by name from the registry
+          if (!iconStr.trim().startsWith('<svg') && iconStr.includes(':')) {
             commandIcon = LabIcon.resolve({
               icon: iconStr
             });
           } else {
-            // Assume it's an SVG string
+            const iconName = `${plugin.id}-icon:${item.id}`;
+            const namespaceSvg = namespaceSvgClasses(iconStr, item.id);
             commandIcon = new LabIcon({
-              name: `${plugin.id}-icon:${item.id}`,
-              svgstr: iconStr
+              name: iconName,
+              svgstr: namespaceSvg
             });
           }
         } catch (e) {
-            console.warn(`Could not resolve icon '${iconStr}' for ${commandId}. Using default.`);
-            // Fallback to default launch icon
+            console.warn(`Could not resolve or create icon for ${commandId}. Icon string: '${iconStr.substring(0, 70)}...'. Using default. Error:`, e);
             commandIcon = LabIcon.resolve({ icon: 'ui-components:launch' });
         }
 
+        if (!commandIcon) {
+          console.error(`Failed to obtain any icon instance for ${commandId}. Skipping item.`);
+          return; // Skip this item if icon is still somehow undefined
+        }
 
-        // Add the command to the application's command registry
-        const commandDisposable = app.commands.addCommand(commandId, {
-          label: item.label,
-          caption: `Open ${item.label}`, 
-          icon: commandIcon,
-          execute: () => {
-            window.open(item.url, '_blank');
-          }
-        });
-        commandsDisposables.push(commandDisposable);
 
-        // Add the command to the launcher
-        const launcherItemDisposable = launcher.add({
-          command: commandId,
-          category: item.category || 'Other', // Default category
-          rank: item.rank || 1 // Default rank
-        });
-        launcherItemsDisposables.push(launcherItemDisposable);
+        try {
+          // Add the command to the application's command registry
+          const commandDisposable = app.commands.addCommand(commandId, {
+            label: item.label,
+            caption: `Open ${item.label}`, 
+            icon: commandIcon,
+            execute: () => {
+              window.open(item.url, '_blank');
+            }
+          });
+          commandsDisposables.push(commandDisposable);
+
+          // Add the command to the launcher
+          const launcherItemDisposable = launcher.add({
+            command: commandId,
+            category: item.category || 'Other',
+            rank: item.rank || 1 
+          });
+          launcherItemsDisposables.push(launcherItemDisposable);
+        } catch (error) {
+          console.error(`Failed to add launcher item '${item.label}':`, error);
+        }
       });
     };
 
@@ -111,7 +133,6 @@ const plugin: JupyterFrontEndPlugin<void> = {
         });
     } else {
       console.warn('ISettingRegistry not available. Cannot load custom launchers.');
-      // Optionally, load default launchers here if settings are unavailable
     }
   }
 };
