@@ -17,24 +17,26 @@ interface ILauncherItem {
   rank?: number;
 }
 
+// const categories = ['Notebook', 'Console', 'Other'];
 // Add this function to process the SVG string
 function namespaceSvgClasses(svgStr: string, namespace: string): string {
   // Create a unique prefix based on the namespace
   const prefix = `${namespace}-cls-`;
-  
+
   // Replace all class definitions in style elements
-  svgStr = svgStr.replace(
-    /\.cls-(\d+)\s*{([^}]+)}/g,
-    `.${prefix}$1{$2}`
-  );
-  
+  svgStr = svgStr.replace(/\.cls-(\d+)\s*{([^}]+)}/g, `.${prefix}$1{$2}`);
+
   // Replace all class attributes on elements
-  svgStr = svgStr.replace(
-    /class="cls-(\d+)"/g,
-    `class="${prefix}$1"`
-  );
-  
+  svgStr = svgStr.replace(/class="cls-(\d+)"/g, `class="${prefix}$1"`);
+
   return svgStr;
+}
+
+function capitalizeFirst(str: string | undefined): string {
+  if (!str) {
+    return '';
+  }
+  return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 const plugin: JupyterFrontEndPlugin<void> = {
@@ -48,26 +50,30 @@ const plugin: JupyterFrontEndPlugin<void> = {
     launcher: ILauncher,
     settingRegistry: ISettingRegistry | null
   ) => {
-    console.log('JupyterLab extension lab-launcher-customization is activated!');
+    console.log(
+      'JupyterLab extension lab-launcher-customization is activated!'
+    );
 
-    // Keep track of added commands and launcher items to dispose them later
+    // Keep track of added commands and launcher items to dispose of them later
     let commandsDisposables: IDisposable[] = [];
     let launcherItemsDisposables: IDisposable[] = [];
 
     // Function to update launchers based on settings
     const updateLaunchers = (settings: ISettingRegistry.ISettings) => {
-      // Dispose previous commands and launcher items
+      // Dispose of previous commands and launcher items
       commandsDisposables.forEach(d => d.dispose());
       commandsDisposables = [];
       launcherItemsDisposables.forEach(d => d.dispose());
       launcherItemsDisposables = [];
 
       // Safely get the launchers setting and cast through unknown
-      const configuredLaunchers = (settings.get('launchers').composite as unknown as ILauncherItem[]) || [];
+      const configuredLaunchers =
+        (settings.get('launchers').composite as unknown as ILauncherItem[]) ||
+        [];
       console.log('Updating launchers with:', configuredLaunchers);
       configuredLaunchers.forEach(item => {
         const commandId = `${plugin.id}:${item.id}`;
-        const iconStr = item.icon || 'ui-components:launch'; // Default icon
+        const iconStr = item.icon || 'ui-components:launch';
 
         // Try to resolve LabIcon by name, otherwise assume it's an SVG string
         let commandIcon: LabIcon;
@@ -85,33 +91,36 @@ const plugin: JupyterFrontEndPlugin<void> = {
             });
           }
         } catch (e) {
-            console.warn(`Could not resolve or create icon for ${commandId}. Icon string: '${iconStr.substring(0, 70)}...'. Using default. Error:`, e);
-            commandIcon = LabIcon.resolve({ icon: 'ui-components:launch' });
+          console.warn(
+            `Could not resolve or create icon for ${commandId}. Icon string: '${iconStr.substring(0, 70)}...'. Using default. Error:`,
+            e
+          );
+          commandIcon = LabIcon.resolve({ icon: 'ui-components:launch' });
         }
 
         if (!commandIcon) {
-          console.error(`Failed to obtain any icon instance for ${commandId}. Skipping item.`);
+          console.error(
+            `Failed to obtain any icon instance for ${commandId}. Skipping item.`
+          );
           return; // Skip this item if icon is still somehow undefined
         }
-
 
         try {
           // Add the command to the application's command registry
           const commandDisposable = app.commands.addCommand(commandId, {
             label: item.label,
-            caption: `Open ${item.label}`, 
+            caption: `Open ${item.label}`,
             icon: commandIcon,
             execute: () => {
               window.open(item.url, '_blank');
             }
           });
           commandsDisposables.push(commandDisposable);
-
           // Add the command to the launcher
           const launcherItemDisposable = launcher.add({
             command: commandId,
-            category: item.category || 'Other',
-            rank: item.rank || 1 
+            category: capitalizeFirst(item.category) || 'Other',
+            rank: item.rank || 1
           });
           launcherItemsDisposables.push(launcherItemDisposable);
         } catch (error) {
@@ -124,15 +133,23 @@ const plugin: JupyterFrontEndPlugin<void> = {
       settingRegistry
         .load(plugin.id)
         .then(settings => {
-          console.log('lab-launcher-customization settings loaded:', settings.composite);
+          console.log(
+            'lab-launcher-customization settings loaded:',
+            settings.composite
+          );
           updateLaunchers(settings); // Initial population
           settings.changed.connect(updateLaunchers); // Update on change
         })
         .catch(reason => {
-          console.error('Failed to load settings for lab-launcher-customization.', reason);
+          console.error(
+            'Failed to load settings for lab-launcher-customization.',
+            reason
+          );
         });
     } else {
-      console.warn('ISettingRegistry not available. Cannot load custom launchers.');
+      console.warn(
+        'ISettingRegistry not available. Cannot load custom launchers.'
+      );
     }
   }
 };

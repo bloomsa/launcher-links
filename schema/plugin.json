@@ -31,12 +31,12 @@
           "category": {
             "type": "string",
             "description": "Category in the JupyterLab launcher.",
-            "default": "Other"
+            "default": "Help"
           },
           "rank": {
-              "type": "number",
-              "description": "Rank order within the category.",
-              "default": 1
+            "type": "number",
+            "description": "Rank order within the category.",
+            "default": 1
           }
         },
         "required": ["id", "label", "url"]
