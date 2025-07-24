@@ -126,3 +126,7 @@ dmypy.json
 
 notes.md
 .aider*
+
+.idea/
+
+CLAUDE.md

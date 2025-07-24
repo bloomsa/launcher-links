@@ -17,16 +17,11 @@ interface ILauncherItem {
   rank?: number;
 }
 
-// const categories = ['Notebook', 'Console', 'Other'];
 // Add this function to process the SVG string
 function namespaceSvgClasses(svgStr: string, namespace: string): string {
-  // Create a unique prefix based on the namespace
   const prefix = `${namespace}-cls-`;
 
-  // Replace all class definitions in style elements
   svgStr = svgStr.replace(/\.cls-(\d+)\s*{([^}]+)}/g, `.${prefix}$1{$2}`);
-
-  // Replace all class attributes on elements
   svgStr = svgStr.replace(/class="cls-(\d+)"/g, `class="${prefix}$1"`);
 
   return svgStr;
@@ -57,6 +52,8 @@ const plugin: JupyterFrontEndPlugin<void> = {
     // Keep track of added commands and launcher items to dispose of them later
     let commandsDisposables: IDisposable[] = [];
     let launcherItemsDisposables: IDisposable[] = [];
+    // keep track of which categories have been used
+    let categories = ['Notebook', 'Console', 'Other'];
 
     // Function to update launchers based on settings
     const updateLaunchers = (settings: ISettingRegistry.ISettings) => {
@@ -71,6 +68,33 @@ const plugin: JupyterFrontEndPlugin<void> = {
         (settings.get('launchers').composite as unknown as ILauncherItem[]) ||
         [];
       console.log('Updating launchers with:', configuredLaunchers);
+
+      // Track which categories we've seen
+      const seenCategories = new Set<string>();
+
+      // First pass: add sentinel items for new categories
+      configuredLaunchers.forEach(item => {
+        const category = capitalizeFirst(item.category) || 'Other';
+        if (!categories.includes(category) && !seenCategories.has(category)) {
+          seenCategories.add(category);
+          const sentinelId = `${plugin.id}:sentinel-${category.toLowerCase()}`;
+          const commandDisposable = app.commands.addCommand(sentinelId, {
+            label: category,
+            caption: `Category: ${category}`,
+            icon: LabIcon.resolve({ icon: 'ui-components:folder' }),
+            execute: () => {} // No-op since this is just a sentinel
+          });
+          commandsDisposables.push(commandDisposable);
+          const launcherItemDisposable = launcher.add({
+            command: sentinelId,
+            category: category,
+            rank: -Infinity
+          });
+          launcherItemsDisposables.push(launcherItemDisposable);
+        }
+      });
+
+      // Second pass: add actual launcher items
       configuredLaunchers.forEach(item => {
         const commandId = `${plugin.id}:${item.id}`;
         const iconStr = item.icon || 'ui-components:launch';
