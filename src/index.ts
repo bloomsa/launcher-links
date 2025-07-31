@@ -80,7 +80,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
           const sentinelId = `${plugin.id}:sentinel-${category.toLowerCase()}`;
           const commandDisposable = app.commands.addCommand(sentinelId, {
             label: category,
-            caption: `Category: ${category}`,
+            caption: `sentinel-item:${category}`,
             icon: LabIcon.resolve({ icon: 'ui-components:folder' }),
             execute: () => {} // No-op since this is just a sentinel
           });
@@ -88,7 +88,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
           const launcherItemDisposable = launcher.add({
             command: sentinelId,
             category: category,
-            rank: -Infinity
+            rank: -Infinity,
           });
           launcherItemsDisposables.push(launcherItemDisposable);
         }
