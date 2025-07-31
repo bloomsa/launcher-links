@@ -4,7 +4,11 @@
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/bloomsa/lab-launcher-customization/main?urlpath=lab)
 
 
-Add abitrary launcher icons 
+Add JupyterLab Launcher items that link out to external sites. 
+
+You can add custom icons with SVG strings, or leverage pre-existing JupyterLab icons. Additionally, you can add items to any section of the launcher, or create brand new sections for your link items automatically.
+
+![alt text](<media/launcher-with-items.png>)
 
 ## Requirements
 
