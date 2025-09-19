@@ -3,7 +3,7 @@ requires = ["hatchling>=1.5.0", "jupyterlab>=4.0.0,<5", "hatch-nodejs-version>=0
 build-backend = "hatchling.build"
 
 [project]
-name = "lab_launcher_customization"
+name = "launcher_links"
 readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.9"
@@ -34,24 +34,24 @@ source = "nodejs"
 fields = ["description", "authors", "urls", "keywords"]
 
 [tool.hatch.build.targets.sdist]
-artifacts = ["lab_launcher_customization/labextension"]
+artifacts = ["launcher_links/labextension"]
 exclude = [".github", "binder"]
 
 [tool.hatch.build.targets.wheel.shared-data]
-"lab_launcher_customization/labextension" = "share/jupyter/labextensions/lab-launcher-customization"
-"install.json" = "share/jupyter/labextensions/lab-launcher-customization/install.json"
+"launcher_links/labextension" = "share/jupyter/labextensions/launcher-links"
+"install.json" = "share/jupyter/labextensions/launcher-links/install.json"
 
 [tool.hatch.build.hooks.version]
-path = "lab_launcher_customization/_version.py"
+path = "launcher_links/_version.py"
 
 [tool.hatch.build.hooks.jupyter-builder]
 dependencies = ["hatch-jupyter-builder>=0.5"]
 build-function = "hatch_jupyter_builder.npm_builder"
 ensured-targets = [
-    "lab_launcher_customization/labextension/static/style.js",
-    "lab_launcher_customization/labextension/package.json",
+    "launcher_links/labextension/static/style.js",
+    "launcher_links/labextension/package.json",
 ]
-skip-if-exists = ["lab_launcher_customization/labextension/static/style.js"]
+skip-if-exists = ["launcher_links/labextension/static/style.js"]
 
 [tool.hatch.build.hooks.jupyter-builder.build-kwargs]
 build_cmd = "build:prod"
@@ -61,7 +61,7 @@ npm = ["jlpm"]
 build_cmd = "install:extension"
 npm = ["jlpm"]
 source_dir = "src"
-build_dir = "lab_launcher_customization/labextension"
+build_dir = "launcher_links/labextension"
 
 [tool.jupyter-releaser.options]
 version_cmd = "hatch version"

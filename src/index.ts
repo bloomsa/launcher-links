@@ -35,7 +35,7 @@ function capitalizeFirst(str: string | undefined): string {
 }
 
 const plugin: JupyterFrontEndPlugin<void> = {
-  id: 'lab-launcher-customization:plugin',
+  id: 'launcher-links:plugin',
   description: 'Add arbitrary launcher icons based on settings.',
   autoStart: true,
   optional: [ISettingRegistry],
@@ -45,15 +45,13 @@ const plugin: JupyterFrontEndPlugin<void> = {
     launcher: ILauncher,
     settingRegistry: ISettingRegistry | null
   ) => {
-    console.log(
-      'JupyterLab extension lab-launcher-customization is activated!'
-    );
+    console.log('JupyterLab extension launcher-links is activated!');
 
     // Keep track of added commands and launcher items to dispose of them later
     let commandsDisposables: IDisposable[] = [];
     let launcherItemsDisposables: IDisposable[] = [];
     // keep track of which categories have been used
-    let categories = ['Notebook', 'Console', 'Other'];
+    const categories = ['Notebook', 'Console', 'Other'];
 
     // Function to update launchers based on settings
     const updateLaunchers = (settings: ISettingRegistry.ISettings) => {
@@ -88,7 +86,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
           const launcherItemDisposable = launcher.add({
             command: sentinelId,
             category: category,
-            rank: -Infinity,
+            rank: -Infinity
           });
           launcherItemsDisposables.push(launcherItemDisposable);
         }
@@ -157,18 +155,12 @@ const plugin: JupyterFrontEndPlugin<void> = {
       settingRegistry
         .load(plugin.id)
         .then(settings => {
-          console.log(
-            'lab-launcher-customization settings loaded:',
-            settings.composite
-          );
+          console.log('launcher-links settings loaded:', settings.composite);
           updateLaunchers(settings); // Initial population
           settings.changed.connect(updateLaunchers); // Update on change
         })
         .catch(reason => {
-          console.error(
-            'Failed to load settings for lab-launcher-customization.',
-            reason
-          );
+          console.error('Failed to load settings for launcher-links.', reason);
         });
     } else {
       console.warn(

@@ -1,5 +1,5 @@
 {
-    "name": "lab-launcher-customization",
+    "name": "launcher-links",
     "version": "0.1.0",
     "description": "Add abitrary launcher icons ",
     "keywords": [
@@ -7,9 +7,9 @@
         "jupyterlab",
         "jupyterlab-extension"
     ],
-    "homepage": "https://github.com/bloomsa/lab-launcher-customization",
+    "homepage": "https://github.com/bloomsa/launcher-links",
     "bugs": {
-        "url": "https://github.com/bloomsa/lab-launcher-customization/issues"
+        "url": "https://github.com/bloomsa/launcher-links/issues"
     },
     "license": "BSD-3-Clause",
     "author": {
@@ -27,7 +27,7 @@
     "style": "style/index.css",
     "repository": {
         "type": "git",
-        "url": "https://github.com/bloomsa/lab-launcher-customization.git"
+        "url": "https://github.com/bloomsa/launcher-links.git"
     },
     "scripts": {
         "build": "jlpm build:lib && jlpm build:labextension:dev",
@@ -39,7 +39,7 @@
         "clean": "jlpm clean:lib",
         "clean:lib": "rimraf lib tsconfig.tsbuildinfo",
         "clean:lintcache": "rimraf .eslintcache .stylelintcache",
-        "clean:labextension": "rimraf lab_launcher_customization/labextension lab_launcher_customization/_version.py",
+        "clean:labextension": "rimraf launcher_links/labextension launcher_links/_version.py",
         "clean:all": "jlpm clean:lib && jlpm clean:labextension && jlpm clean:lintcache",
         "eslint": "jlpm eslint:check --fix",
         "eslint:check": "eslint . --cache --ext .ts,.tsx",
@@ -98,7 +98,7 @@
     },
     "jupyterlab": {
         "extension": true,
-        "outputDir": "lab_launcher_customization/labextension",
+        "outputDir": "launcher_links/labextension",
         "schemaDir": "schema"
     },
     "eslintIgnore": [

@@ -1,14 +1,13 @@
-# lab_launcher_customization
+# launcher_links
 
-[![Github Actions Status](https://github.com/bloomsa/lab-launcher-customization/workflows/Build/badge.svg)](https://github.com/bloomsa/lab-launcher-customization/actions/workflows/build.yml)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/bloomsa/lab-launcher-customization/main?urlpath=lab)
+[![Github Actions Status](https://github.com/bloomsa/launcher-links/workflows/Build/badge.svg)](https://github.com/bloomsa/launcher-links/actions/workflows/build.yml)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/bloomsa/launcher-links/main?urlpath=lab)
 
-
-Add JupyterLab Launcher items that link out to external sites. 
+Add JupyterLab Launcher items that link out to external sites.
 
 You can add custom icons with SVG strings, or leverage pre-existing JupyterLab icons. Additionally, you can add items to any section of the launcher, or create brand new sections for your link items automatically.
 
-![alt text](<media/launcher-with-items.png>)
+![alt text](media/launcher-with-items.png)
 
 ## Requirements
 
@@ -19,7 +18,7 @@ You can add custom icons with SVG strings, or leverage pre-existing JupyterLab i
 To install the extension, execute:
 
 ```bash
-pip install lab_launcher_customization
+pip install launcher_links
 ```
 
 ## Uninstall
@@ -27,7 +26,7 @@ pip install lab_launcher_customization
 To remove the extension, execute:
 
 ```bash
-pip uninstall lab_launcher_customization
+pip uninstall launcher_links
 ```
 
 ## Contributing
@@ -42,7 +41,7 @@ The `jlpm` command is JupyterLab's pinned version of
 
 ```bash
 # Clone the repo to your local environment
-# Change directory to the lab_launcher_customization directory
+# Change directory to the launcher_links directory
 # Install package in development mode
 pip install -e "."
 # Link your development version of the extension with JupyterLab
@@ -71,12 +70,12 @@ jupyter lab build --minimize=False
 ### Development uninstall
 
 ```bash
-pip uninstall lab_launcher_customization
+pip uninstall launcher_links
 ```
 
 In development mode, you will also need to remove the symlink created by `jupyter labextension develop`
 command. To find its location, you can run `jupyter labextension list` to figure out where the `labextensions`
-folder is located. Then you can remove the symlink named `lab-launcher-customization` within that folder.
+folder is located. Then you can remove the symlink named `launcher-links` within that folder.
 
 ### Testing the extension
 

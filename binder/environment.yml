@@ -1,10 +1,10 @@
-# a mybinder.org-ready environment for demoing lab_launcher_customization
+# a mybinder.org-ready environment for demoing launcher_links
 # this environment may also be used locally on Linux/MacOS/Windows, e.g.
 #
 #   conda env update --file binder/environment.yml
-#   conda activate lab-launcher-customization-demo
+#   conda activate launcher-links-demo
 #
-name: lab-launcher-customization-demo
+name: launcher-links-demo
 
 channels:
   - conda-forge

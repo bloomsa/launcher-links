@@ -1,7 +1,7 @@
 {
-  "name": "lab-launcher-customization-ui-tests",
+  "name": "launcher-links-ui-tests",
   "version": "1.0.0",
-  "description": "JupyterLab lab-launcher-customization Integration Tests",
+  "description": "JupyterLab launcher-links Integration Tests",
   "private": true,
   "scripts": {
     "start": "jupyter lab --config jupyter_server_test_config.py",

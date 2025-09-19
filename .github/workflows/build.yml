@@ -41,7 +41,7 @@ jobs:
         python -m pip install .[test]
 
         jupyter labextension list
-        jupyter labextension list 2>&1 | grep -ie "lab-launcher-customization.*OK"
+        jupyter labextension list 2>&1 | grep -ie "launcher-links.*OK"
         python -m jupyterlab.browser_check
 
     - name: Package the extension
@@ -50,13 +50,13 @@ jobs:
 
         pip install build
         python -m build
-        pip uninstall -y "lab_launcher_customization" jupyterlab
+        pip uninstall -y "launcher_links" jupyterlab
 
     - name: Upload extension packages
       uses: actions/upload-artifact@v4
       with:
         name: extension-artifacts
-        path: dist/lab_launcher_customization*
+        path: dist/launcher_links*
         if-no-files-found: error
 
   test_isolated:
@@ -79,11 +79,11 @@ jobs:
         sudo rm -rf $(which node)
         sudo rm -rf $(which node)
 
-        pip install "jupyterlab>=4.0.0,<5" lab_launcher_customization*.whl
+        pip install "jupyterlab>=4.0.0,<5" launcher_links*.whl
 
 
         jupyter labextension list
-        jupyter labextension list 2>&1 | grep -ie "lab-launcher-customization.*OK"
+        jupyter labextension list 2>&1 | grep -ie "launcher-links.*OK"
         python -m jupyterlab.browser_check --no-browser-test
 
   integration-tests:
@@ -109,7 +109,7 @@ jobs:
     - name: Install the extension
       run: |
         set -eux
-        python -m pip install "jupyterlab>=4.0.0,<5" lab_launcher_customization*.whl
+        python -m pip install "jupyterlab>=4.0.0,<5" launcher_links*.whl
 
     - name: Install dependencies
       working-directory: ui-tests
@@ -138,7 +138,7 @@ jobs:
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: lab_launcher_customization-playwright-tests
+        name: launcher_links-playwright-tests
         path: |
           ui-tests/test-results
           ui-tests/playwright-report

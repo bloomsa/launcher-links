@@ -1,5 +1,5 @@
 def main():
-    print("Hello from lab-launcher-customization!")
+    print("Hello from launcher-links!")
 
 
 if __name__ == "__main__":

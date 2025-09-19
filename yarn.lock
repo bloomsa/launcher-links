@@ -7041,9 +7041,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lab-launcher-customization@workspace:.":
+"launcher-links@workspace:.":
   version: 0.0.0-use.local
-  resolution: "lab-launcher-customization@workspace:."
+  resolution: "launcher-links@workspace:."
   dependencies:
     "@jupyterlab/application": ^4.0.0
     "@jupyterlab/builder": ^4.0.0

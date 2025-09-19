@@ -1,5 +1,5 @@
 {
   "packageManager": "python",
-  "packageName": "lab_launcher_customization",
-  "uninstallInstructions": "Use your Python package manager (pip, conda, etc.) to uninstall the package lab_launcher_customization"
+  "packageName": "launcher_links",
+  "uninstallInstructions": "Use your Python package manager (pip, conda, etc.) to uninstall the package launcher_links"
 }
