@@ -103,6 +103,8 @@
     },
     "eslintIgnore": [
         "node_modules",
+        ".venv",
+        "**/.venv",
         "dist",
         "coverage",
         "**/*.d.ts",
