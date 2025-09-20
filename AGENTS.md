@@ -18,6 +18,8 @@
 - Production build (wheel + sdist): `uv run hatch build`.
 - Force rebuild if assets are skipped: `jlpm clean:labextension` then reinstall/build.
 
+**Note:** `jlpm` is provided by JupyterLab inside the project virtual environment. Run `. .venv/bin/activate` (or your preferred activation command) before invoking any `jlpm` scripts.
+
 ## Coding Style & Naming Conventions
 
 - TypeScript: ESLint + Prettier. Single quotes, no trailing commas, `eqeqeq`, `curly: all`, prefer arrow callbacks.
