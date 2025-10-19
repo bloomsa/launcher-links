@@ -14,14 +14,13 @@ interface ILauncherItem {
   url: string;
   icon?: string; // LabIcon name or SVG string
   category?: string;
-  rank?: number;
 }
 
-// Add this function to process the SVG string
 function namespaceSvgClasses(svgStr: string, namespace: string): string {
   const prefix = `${namespace}-cls-`;
-
+  // finds and matches css rules, i.e. .cls-1 {...} with .open-google-cls-1 {...}
   svgStr = svgStr.replace(/\.cls-(\d+)\s*{([^}]+)}/g, `.${prefix}$1{$2}`);
+  // updates references to classes w/ namespaced classes ^
   svgStr = svgStr.replace(/class="cls-(\d+)"/g, `class="${prefix}$1"`);
 
   return svgStr;
@@ -46,31 +45,25 @@ const plugin: JupyterFrontEndPlugin<void> = {
     settingRegistry: ISettingRegistry | null
   ) => {
     console.log('JupyterLab extension launcher-links is activated!');
-
     // Keep track of added commands and launcher items to dispose of them later
     let commandsDisposables: IDisposable[] = [];
     let launcherItemsDisposables: IDisposable[] = [];
-    // keep track of which categories have been used
     const categories = ['Notebook', 'Console', 'Other'];
 
-    // Function to update launchers based on settings
     const updateLaunchers = (settings: ISettingRegistry.ISettings) => {
-      // Dispose of previous commands and launcher items
       commandsDisposables.forEach(d => d.dispose());
       commandsDisposables = [];
       launcherItemsDisposables.forEach(d => d.dispose());
       launcherItemsDisposables = [];
 
-      // Safely get the launchers setting and cast through unknown
       const configuredLaunchers =
         (settings.get('launchers').composite as unknown as ILauncherItem[]) ||
         [];
       console.log('Updating launchers with:', configuredLaunchers);
 
-      // Track which categories we've seen
       const seenCategories = new Set<string>();
 
-      // First pass: add sentinel items for new categories
+      // first pass - add sentinel items for new categories
       configuredLaunchers.forEach(item => {
         const category = capitalizeFirst(item.category) || 'Other';
         if (!categories.includes(category) && !seenCategories.has(category)) {
@@ -80,7 +73,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
             label: category,
             caption: `sentinel-item:${category}`,
             icon: LabIcon.resolve({ icon: 'ui-components:folder' }),
-            execute: () => {} // No-op since this is just a sentinel
+            execute: () => {} // No-op for sentinel
           });
           commandsDisposables.push(commandDisposable);
           const launcherItemDisposable = launcher.add({
@@ -93,6 +86,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
       });
 
       // Second pass: add actual launcher items
+      const categoryRankState = new Map<string, number>();
       configuredLaunchers.forEach(item => {
         const commandId = `${plugin.id}:${item.id}`;
         const iconStr = item.icon || 'ui-components:launch';
@@ -139,10 +133,16 @@ const plugin: JupyterFrontEndPlugin<void> = {
           });
           commandsDisposables.push(commandDisposable);
           // Add the command to the launcher
+          const category = capitalizeFirst(item.category) || 'Other';
+          const categoryIndex = categoryRankState.get(category) ?? 0;
+          categoryRankState.set(category, categoryIndex + 1);
+          // Default to appending after the built-in launcher entries while still preserving
+          // relative order between custom items in the same category.
+          const derivedRank = 1000 + categoryIndex;
           const launcherItemDisposable = launcher.add({
             command: commandId,
-            category: capitalizeFirst(item.category) || 'Other',
-            rank: item.rank || 1
+            category,
+            rank: derivedRank
           });
           launcherItemsDisposables.push(launcherItemDisposable);
         } catch (error) {
