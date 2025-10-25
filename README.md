@@ -4,12 +4,12 @@
 [![Github Actions Status](https://github.com/bloomsa/launcher-links/workflows/Build/badge.svg)](https://github.com/bloomsa/launcher-links/actions/workflows/build.yml)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/bloomsa/launcher-links/main?urlpath=lab)
 
-
 Add JupyterLab Launcher items that link out to external sites.
 
 You can add custom icons with SVG strings, or leverage pre-existing JupyterLab icons. Additionally, you can add items to any section of the launcher, or create brand new sections for your link items automatically.
 
 ![Launcher with items](https://raw.githubusercontent.com/bloomsa/launcher-links/main/media/launcher-with-items.png)
+
 ## Requirements
 
 - JupyterLab >= 4.0.0
