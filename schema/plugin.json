@@ -6,7 +6,7 @@
     "launchers": {
       "type": "array",
       "title": "Custom Launchers",
-      "description": "Define custom launcher items to add to the JupyterLab launcher",
+      "description": "Launcher items appear within each category in the same order as this list. Use the move controls in the settings editor to reorder items.",
       "items": {
         "type": "object",
         "properties": {
@@ -32,11 +32,6 @@
             "type": "string",
             "description": "Category in the JupyterLab launcher.",
             "default": "Help"
-          },
-          "rank": {
-            "type": "number",
-            "description": "Rank order within the category.",
-            "default": 1
           }
         },
         "required": ["id", "label", "url"]
@@ -47,16 +42,14 @@
           "label": "Open Jupyter",
           "url": "https://jupyter.org",
           "icon": "ui-components:jupyter",
-          "category": "Help",
-          "rank": 10
+          "category": "Help"
         },
         {
           "id": "open-example",
           "label": "Open Example.com",
           "url": "https://www.example.com",
           "icon": "ui-components:launch",
-          "category": "Other",
-          "rank": 1
+          "category": "Other"
         }
       ]
     }
