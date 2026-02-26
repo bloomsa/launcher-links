@@ -7,6 +7,7 @@ import { ISettingRegistry } from '@jupyterlab/settingregistry';
 import { ILauncher } from '@jupyterlab/launcher';
 import { LabIcon } from '@jupyterlab/ui-components';
 import { IDisposable } from '@lumino/disposable';
+import { sanitizeUserSvg } from './svgSanitizer';
 
 interface ILauncherItem {
   id: string;
@@ -101,9 +102,13 @@ const plugin: JupyterFrontEndPlugin<void> = {
           } else {
             const iconName = `${plugin.id}-icon:${item.id}`;
             const namespaceSvg = namespaceSvgClasses(iconStr, item.id);
+            const sanitizedSvg = sanitizeUserSvg(namespaceSvg);
+            if (!sanitizedSvg) {
+              throw new Error('Invalid or unsafe SVG icon.');
+            }
             commandIcon = new LabIcon({
               name: iconName,
-              svgstr: namespaceSvg
+              svgstr: sanitizedSvg
             });
           }
         } catch (e) {
