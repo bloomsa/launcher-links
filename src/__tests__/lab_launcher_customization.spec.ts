@@ -29,6 +29,7 @@ describe('sanitizeUserSvg', () => {
     expect(sanitized).not.toBeNull();
     expect(sanitized).toContain('<svg');
     expect(sanitized).toContain('<rect');
+    expect(sanitized).toContain('xmlns="http://www.w3.org/2000/svg"');
   });
 
   it('rejects non-svg markup', () => {

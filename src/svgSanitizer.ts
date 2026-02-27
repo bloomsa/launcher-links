@@ -27,5 +27,11 @@ export function sanitizeUserSvg(svgStr: string): string | null {
     return null;
   }
 
+  // LabIcon expects a real SVG element and crashes otherwise.
+  // ensure namespace is always present.
+  if (!root.getAttribute('xmlns')) {
+    root.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+  }
+
   return new XMLSerializer().serializeToString(root);
 }
