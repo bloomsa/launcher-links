@@ -23,7 +23,8 @@ describe('sanitizeUserSvg', () => {
   });
 
   it('keeps valid SVG content', () => {
-    const safeSvg = '<svg viewBox="0 0 10 10"><rect width="10" height="10" /></svg>';
+    const safeSvg =
+      '<svg viewBox="0 0 10 10"><rect width="10" height="10" /></svg>';
     const sanitized = sanitizeUserSvg(safeSvg);
 
     expect(sanitized).not.toBeNull();
